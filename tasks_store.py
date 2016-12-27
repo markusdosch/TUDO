@@ -24,6 +24,16 @@ class TasksStore:
                             , finished TIMESTAMP )""")
         self.conn.commit()
 
+    def delete(self, numbers):
+        for number in numbers:
+            self.conn_cursor.execute("""DELETE FROM tasks WHERE number=?""", number)
+        self.conn.commit()
+
+    def set_done(self, numbers):
+        for number in numbers:
+            self.conn_cursor.execute("""UPDATE tasks SET finished = CURRENT_TIMESTAMP WHERE number=?""", number)
+        self.conn.commit()
+
     def reset(self):
         self.conn_cursor.execute("""DROP TABLE tasks""")
         self.init()

@@ -15,7 +15,7 @@ class Task:
         self.finished = utc.localize(finished).astimezone(tz_germany) if finished else None
 
     def is_finished(self):
-        return True if not self.finished else False
+        return False if not self.finished else True
 
     def date_from_timestamp(self, timestamp):
         return datetime.datetime.fromtimestamp(timestamp, tz_germany) if timestamp else None
