@@ -12,7 +12,7 @@ def main(argv=sys.argv):
         # TODO print help
         return 1
     if argv[1] == "add":
-        add(argv[1:])
+        add(argv[2:])
     if argv[1] == "list":
         list_tasks()
     if argv[1] == "stats":
@@ -21,7 +21,7 @@ def main(argv=sys.argv):
 
 
 # Adds Tasks to the list of tasks
-def add(*descriptions):
+def add(descriptions):
     # TODO Behaviour for no Tasks to add
     for description in descriptions:
         task_db.add_task(description)
