@@ -18,7 +18,7 @@ class TasksStore:
         # print(str(self.conn_cursor.fetchall()))
         return [Task(task[0], task[1], task[2], task[3]) for task in self.conn_cursor.fetchall()]
 
-    def group_tasks_archived(self):
+    def group_tasks_archived(self): # TODO: Localize group date
         self.conn_cursor.execute('''
         SELECT DATE(finished) AS finished_date,
         COUNT(*) AS num_finished
