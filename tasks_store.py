@@ -10,7 +10,7 @@ class TasksStore:
         self.init()
 
     def add_task(self, description):
-        self.conn_cursor.execute("""INSERT INTO tasks (description) VALUES(?)""", [(description)])
+        self.conn_cursor.execute("""INSERT INTO tasks (description) VALUES(?)""", [description])
         self.conn.commit()
 
     def list_tasks(self):
