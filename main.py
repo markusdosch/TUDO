@@ -23,6 +23,8 @@ def main(argv=sys.argv):
             list_tasks(True)
         else:
             list_tasks()
+    if argv[1] == "stats":
+        group_tasks_archived()
     return 0
 
 
@@ -55,6 +57,15 @@ def list_tasks(show_completed=False):
                         not task.is_finished()],
                        headers=["#", "Description", "Started"]))
     return tasks
+
+
+# Returns the number of archived tasks grouped by "finished" date
+def group_tasks_archived():
+    dates_and_nums = task_db.group_tasks_archived()
+    print(tabulate(dates_and_nums,
+                   headers=["Date", "Tasks finished"]))
+    return dates_and_nums
+
 
 def init():
     return
