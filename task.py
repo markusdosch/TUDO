@@ -1,14 +1,21 @@
+import datetime
+
+from pytz import timezone, utc
+
+tz_germany = timezone("Europe/Berlin")
+
+
 class Task:
-    # TODO import Counter number?
-    counter = 0
 
     # Creates a Task
-    def __init__(self, description, started, finished=None):
-        Task.counter += 1
-        self.number = Task.counter
+    def __init__(self, number, description, started, finished=None):
+        self.number = number
         self.description = description
-        self.started = started
-        self.finished = finished
+        self.started = utc.localize(started).astimezone(tz_germany)
+        self.finished = utc.localize(finished).astimezone(tz_germany) if finished else None
 
     def is_finished(self):
         return True if not self.finished else False
+
+    def date_from_timestamp(self, timestamp):
+        return datetime.datetime.fromtimestamp(timestamp, tz_germany) if timestamp else None

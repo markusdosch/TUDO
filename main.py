@@ -1,13 +1,10 @@
-import datetime
 import sys
 
-from pytz import timezone
+from tabulate import tabulate
 
-from task import Task
+import tasks_store
 
-tz_germany = timezone("Europe/Berlin")
-tasks = []
-
+task_db = tasks_store.TasksStore()
 
 def main(argv=sys.argv):
     print(str(argv))
@@ -24,20 +21,21 @@ def main(argv=sys.argv):
 # Adds Tasks to the list of tasks
 def add(*descriptions):
     # TODO Behaviour for no Tasks to add
-    global tasks
     for description in descriptions:
-        tasks.append(Task(description, datetime.now(tz_germany)))
+        task_db.add_task(description)
     return
 
 
 # Returns the full list of tasks
 def list_tasks():
+    tasks = task_db.list_tasks()
+    print(tabulate([[task.number, task.description, task.started.strftime("%Y-%m-%d %H:%M")] for task in tasks],
+                   headers=["#", "Description", "Started"]))
     return tasks
 
 
 def init():
-    global tasks
-    tasks = []
+    return
 
 
 if __name__ == "__main__":
