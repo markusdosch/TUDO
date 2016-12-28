@@ -1,9 +1,13 @@
 import sys
 
-import store as store
-import controller as controller
+import controller
+import store
 
-task_db = store.TasksStore()
+task_db = None
+
+
+def get_task_db():
+    return task_db
 
 
 def main(argv=sys.argv):
@@ -11,39 +15,43 @@ def main(argv=sys.argv):
         # TODO print help
         return 1
 
-
-    Switch = {
-        "addp": controller.add_prioritised,
-        "listp": listp,
-        "add": controller.add,
-        "del": controller.delete_tasks,
-        "fin": controller.finish_tasks,
+    switch = {
         "list": controller.list_tasks,
+        "add": controller.add,
+        "rm": controller.remove_tasks,
+        "done": controller.finish_tasks,
         "stats": controller.group_tasks_archived,
         "eisenhower": controller.eisenhower_matrix
     }
 
-    Switch[argv[1]](argv[2:])
+    switch[argv[1]](argv[2:])
     return 0
 
 
-def listp(args):
-    if args[0] == "val" and len(args) == 3:
-        controller.list_priorities(important=int(args[1]), urgent=int(args[3]))
-    else:
-        controller.list_priorities()
-    return
-
-
 def list(args):
-    if args[0] == "all" and len(args) == 1:
-        controller.list_tasks(show_completed=True)
+    if args[0] == "all":
+        if len(args) > 1:
+            if len(args) == 4 and args[1] == "--prio":
+                controller.list_tasks(show_completed=True, important=int(args[2]), urgent=int(args[3]))
+            else:
+                controller.list_tasks(show_completed=True)
+        else:
+            controller.list_tasks(show_completed=True)
     else:
-        controller.list_tasks()
+        if len(args) > 0:
+            if len(args) == 3 and args[0] == "--prio":
+                controller.list_tasks(important=int(args[1]), urgent=int(args[2]))
+            else:
+                controller.list_tasks()
+        else:
+            controller.list_tasks()
 
 
-def init():
-    return
+def init(database_name = "database.db"):
+    global task_db
+    task_db = store.TasksStore(database_name)
+
 
 if __name__ == "__main__":
+    init()
     SystemExit(main())

@@ -4,9 +4,9 @@ from task import Task
 
 
 class TasksStore:
-    def __init__(self, conn=sqlite3.connect("database.db", detect_types=sqlite3.PARSE_DECLTYPES)):
-        self.conn = conn
-        self.conn_cursor = conn.cursor()
+    def __init__(self, db_name = "database.db"):
+        self.conn = sqlite3.connect(db_name, detect_types=sqlite3.PARSE_DECLTYPES)
+        self.conn_cursor = self.conn.cursor()
         self.init()
 
     def add_task(self, description):
@@ -46,7 +46,7 @@ class TasksStore:
                             , finished TIMESTAMP, important INTEGER, urgent INTEGER)""")
         self.conn.commit()
 
-    def delete(self, numbers):
+    def remove(self, numbers):
         for number in numbers:
             self.conn_cursor.execute("""DELETE FROM tasks WHERE number=?""", number)
         self.conn.commit()
