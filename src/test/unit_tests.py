@@ -1,6 +1,6 @@
 import unittest
 
-import main
+import controller, main
 
 
 class TestTudoMethods(unittest.TestCase):
@@ -9,12 +9,12 @@ class TestTudoMethods(unittest.TestCase):
         main.task_db.reset()
 
     def test_add(self):
-        main.add(["Do Homework"])
+        controller.add(["Do Homework"])
         # self.assertEqual(main.list_tasks()[-1], "Do Homework")
-        self.assertTrue(len(main.list_tasks()) == 1)
+        self.assertTrue(len(controller.list_tasks()) == 1)
 
     def test_list(self):
-        self.assertTrue(len(main.list_tasks()) == 0)
+        self.assertTrue(len(controller.list_tasks()) == 0)
 
 
 if __name__ == "__main__":

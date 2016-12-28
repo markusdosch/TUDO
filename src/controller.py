@@ -1,41 +1,8 @@
-import sys
+from itertools import zip_longest
 
 from tabulate import tabulate
-from itertools import repeat, zip_longest
 
-import tasks_store
-
-task_db = tasks_store.TasksStore()
-
-def main(argv=sys.argv):
-    if len(argv) == 1:
-        # TODO print help
-        return 1
-
-    if argv[1] == "addp":
-        add_prioritised(argv[2:])
-    if argv[1] == "listp":
-        if len(argv) > 2 and argv[2] == "val":
-            list_priorities(int(argv[3]), int(argv[4]))
-        else:
-            list_prioritiesp()
-    if argv[1] == "add":
-        add(argv[2:])
-    if argv[1] == "del":
-        delete_tasks(argv[2:])
-    if argv[1] == "fin":
-        finish_tasks(argv[2:])
-
-    if argv[1] == "list":
-        if len(argv) > 2 and argv[2] == "all":
-            list_tasks(True)
-        else:
-            list_tasks()
-    if argv[1] == "stats":
-        group_tasks_archived()
-    if argv[1] == "eisenhower":
-        eisenhower_matrix()
-    return 0
+from main import task_db
 
 
 def finish_tasks(numbers):
@@ -47,7 +14,7 @@ def delete_tasks(numbers):
     task_db.delete(numbers)
     return
 
-# Adds Tasks to the list of tasks
+
 def add(descriptions):
     # TODO Behaviour for no Tasks to add
     for description in descriptions:
@@ -60,22 +27,17 @@ def add_prioritised(args):
         task_db.add_task_p([args[i * 3], args[i * 3 + 1], args[i * 3 + 2]])
 
 
-def list_prioritiesp():
-    tasks = task_db.list_tasks()
+def list_priorities(important = None, urgent = None):
+    if important and urgent:
+        tasks = task_db.list_tasks_p(important, urgent)
+    else:
+        tasks = task_db.list_tasks()
+
     print(tabulate([[task.number, task.description, task.started.strftime("%Y-%m-%d %H:%M"),
                      task.finished.strftime("%Y-%m-%d %H:%M") if task.finished else "Not Yet", task.important,
                      task.urgent] for task in tasks],
                    headers=["#", "Description", "Started", "Finished", "important", "urgent"]))
 
-
-def list_priorities(important, urgent):
-    tasks = task_db.list_tasks_p(important, urgent)
-    print(tabulate([[task.number, task.description, task.started.strftime("%Y-%m-%d %H:%M"),
-                     task.finished.strftime("%Y-%m-%d %H:%M") if task.finished else "Not Yet", task.important,
-                     task.urgent] for task in tasks],
-                   headers=["#", "Description", "Started", "Finished", "important", "urgent"]))
-
-# Returns the full list of tasks
 def list_tasks(show_completed=False):
     tasks = task_db.list_tasks()
     if show_completed:
@@ -89,14 +51,14 @@ def list_tasks(show_completed=False):
     return tasks
 
 
-# Returns the number of archived tasks grouped by "finished" date
-def group_tasks_archived():
+def group_tasks_archived(*args):
     dates_and_nums = task_db.group_tasks_archived()
     print(tabulate(dates_and_nums,
                    headers=["Date", "Tasks finished"]))
     return dates_and_nums
 
-def eisenhower_matrix():
+
+def eisenhower_matrix(*args):
     col0 = col1 = col2 = col3 = []
 
     imp_urg = list(map(lambda task: str(task.number) + ": "+task.description, task_db.list_tasks_p(1, 1)))
@@ -119,11 +81,3 @@ def eisenhower_matrix():
     zipped = zip_longest(col0, col1, col2, col3, fillvalue=" ")
     print(tabulate(list(zipped),
                    headers=[" ", "Urgent (1)", "---", "Not Urgent (0)"]))
-
-
-def init():
-    return
-
-
-if __name__ == "__main__":
-    SystemExit(main())

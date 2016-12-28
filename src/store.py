@@ -4,7 +4,7 @@ from task import Task
 
 
 class TasksStore:
-    def __init__(self, conn=sqlite3.connect("example.db", detect_types=sqlite3.PARSE_DECLTYPES)):
+    def __init__(self, conn=sqlite3.connect("database.db", detect_types=sqlite3.PARSE_DECLTYPES)):
         self.conn = conn
         self.conn_cursor = conn.cursor()
         self.init()
