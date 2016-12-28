@@ -18,7 +18,7 @@ def main(argv=sys.argv):
         if len(argv) > 2 and argv[2] == "val":
             list_priorities(int(argv[3]), int(argv[4]))
         else:
-            list_priorities()
+            list_prioritiesp()
     if argv[1] == "add":
         add(argv[2:])
     if argv[1] == "del":
@@ -60,7 +60,7 @@ def add_prioritised(args):
         task_db.add_task_p([args[i * 3], args[i * 3 + 1], args[i * 3 + 2]])
 
 
-def list_priorities():
+def list_prioritiesp():
     tasks = task_db.list_tasks()
     print(tabulate([[task.number, task.description, task.started.strftime("%Y-%m-%d %H:%M"),
                      task.finished.strftime("%Y-%m-%d %H:%M") if task.finished else "Not Yet", task.important,
@@ -99,17 +99,17 @@ def group_tasks_archived():
 def eisenhower_matrix():
     col0 = col1 = col2 = col3 = []
 
-    imp_urg = ["Imp", "Urg"]
-    imp_not_urg = ["Imp", "Not", "Urg"]
-    not_imp_urg = ["Not", "Imp", "Urg"]
-    not_imp_not_urg = ["Not", "Imp", "Not", "Urg"]
+    imp_urg = list(map(lambda task: task.description, task_db.list_tasks_p(1, 1)))
+    imp_not_urg = list(map(lambda task: task.description, task_db.list_tasks_p(1, 0)))
+    not_imp_urg = list(map(lambda task: task.description, task_db.list_tasks_p(0, 1)))
+    not_imp_not_urg = list(map(lambda task: task.description, task_db.list_tasks_p(0, 0)))
 
     if len(imp_urg) < len(imp_not_urg):
         diff = len(imp_not_urg) - len(imp_urg)
         imp_urg.extend([" "] * diff)
     elif len(imp_not_urg) < len(imp_urg):
         diff = len(imp_urg) - len(imp_not_urg)
-        imp_urg.extend([" "] * diff)
+        imp_not_urg.extend([" "] * diff)
 
     col0 = ["Important"] + [" "] * (len(imp_urg) - 1) + ["---", "Not Important"]
     col1 = imp_urg + ["---"] + not_imp_urg
