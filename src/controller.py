@@ -53,6 +53,7 @@ def list_tasks(show_completed=False, important = None, urgent = None):
     return tasks
 
 
+# TODO: Be able to set time range for grouping
 def group_tasks_archived(*args):
     dates_and_nums = get_task_db().group_tasks_archived()
     print(tabulate(dates_and_nums,

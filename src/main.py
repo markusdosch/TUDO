@@ -9,15 +9,15 @@ task_db = None
 def get_task_db():
     return task_db
 
-
+# TODO: Call our app via "tudo <command>", not with "main.py"
 def main(argv=sys.argv):
     if len(argv) == 1:
         # TODO print help
         return 1
 
     switch = {
-        "list": controller.list_tasks,
         "add": controller.add,
+        "list": controller.list_tasks,
         "rm": controller.remove_tasks,
         "done": controller.finish_tasks,
         "stats": controller.group_tasks_archived,
