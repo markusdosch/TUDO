@@ -12,6 +12,13 @@ def main(argv=sys.argv):
         # TODO print help
         return 1
 
+    if argv[1] == "addp":
+        add_prioritised(argv[2:])
+    if argv[1] == "listp":
+        if len(argv) > 2 and argv[2] == "val":
+            list_priorities(int(argv[3]), int(argv[4]))
+        else:
+            list_priorities()
     if argv[1] == "add":
         add(argv[2:])
     if argv[1] == "del":
@@ -47,6 +54,26 @@ def add(descriptions):
         task_db.add_task(description)
     return
 
+
+def add_prioritised(args):
+    for i in range(0, len(args) // 3):
+        task_db.add_task_p([args[i * 3], args[i * 3 + 1], args[i * 3 + 2]])
+
+
+def list_priorities():
+    tasks = task_db.list_tasks()
+    print(tabulate([[task.number, task.description, task.started.strftime("%Y-%m-%d %H:%M"),
+                     task.finished.strftime("%Y-%m-%d %H:%M") if task.finished else "Not Yet", task.important,
+                     task.urgent] for task in tasks],
+                   headers=["#", "Description", "Started", "Finished", "important", "urgent"]))
+
+
+def list_priorities(important, urgent):
+    tasks = task_db.list_tasks_p(important, urgent)
+    print(tabulate([[task.number, task.description, task.started.strftime("%Y-%m-%d %H:%M"),
+                     task.finished.strftime("%Y-%m-%d %H:%M") if task.finished else "Not Yet", task.important,
+                     task.urgent] for task in tasks],
+                   headers=["#", "Description", "Started", "Finished", "important", "urgent"]))
 
 # Returns the full list of tasks
 def list_tasks(show_completed=False):

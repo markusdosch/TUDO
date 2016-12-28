@@ -9,9 +9,8 @@ class TestTudoMethods(unittest.TestCase):
         main.task_db.reset()
 
     def test_add(self):
-        main.add("Do Homework")
+        main.add(["Do Homework"])
         # self.assertEqual(main.list_tasks()[-1], "Do Homework")
-        print(len(main.list_tasks()))
         self.assertTrue(len(main.list_tasks()) == 1)
 
     def test_list(self):

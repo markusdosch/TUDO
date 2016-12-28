@@ -10,13 +10,24 @@ class TasksStore:
         self.init()
 
     def add_task(self, description):
-        self.conn_cursor.execute("""INSERT INTO tasks (description) VALUES(?)""", [description])
+        self.conn_cursor.execute("""INSERT INTO tasks (description, important, urgent) VALUES(?, ?, ?)""",
+                                 [description, 0, 0])
+        self.conn.commit()
+
+    def add_task_p(self, values):
+        self.conn_cursor.execute("""INSERT INTO tasks (description, important, urgent) VALUES(?, ?, ?)""",
+                                 [values[0], int(values[1]), int(values[2])])
         self.conn.commit()
 
     def list_tasks(self):
         self.conn_cursor.execute("SELECT * FROM tasks")
         # print(str(self.conn_cursor.fetchall()))
-        return [Task(task[0], task[1], task[2], task[3]) for task in self.conn_cursor.fetchall()]
+        return [Task(task[0], task[1], task[2], task[3], task[4], task[5]) for task in self.conn_cursor.fetchall()]
+
+    def list_tasks_p(self, important, urgent):
+        self.conn_cursor.execute("SELECT * FROM tasks WHERE urgent = ? AND important = ?", [urgent, important])
+        # print(str(self.conn_cursor.fetchall()))
+        return [Task(task[0], task[1], task[2], task[3], task[4], task[5]) for task in self.conn_cursor.fetchall()]
 
     def group_tasks_archived(self): # FIXME: Localize group date
         self.conn_cursor.execute('''
@@ -32,7 +43,7 @@ class TasksStore:
     def init(self):
         self.conn_cursor.execute("""CREATE TABLE IF NOT EXISTS tasks
                             (number INTEGER PRIMARY KEY AUTOINCREMENT, description TEXT, started TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                            , finished TIMESTAMP )""")
+                            , finished TIMESTAMP, important INTEGER, urgent INTEGER)""")
         self.conn.commit()
 
     def delete(self, numbers):
