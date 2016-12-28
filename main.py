@@ -99,10 +99,10 @@ def group_tasks_archived():
 def eisenhower_matrix():
     col0 = col1 = col2 = col3 = []
 
-    imp_urg = list(map(lambda task: task.description, task_db.list_tasks_p(1, 1)))
-    imp_not_urg = list(map(lambda task: task.description, task_db.list_tasks_p(1, 0)))
-    not_imp_urg = list(map(lambda task: task.description, task_db.list_tasks_p(0, 1)))
-    not_imp_not_urg = list(map(lambda task: task.description, task_db.list_tasks_p(0, 0)))
+    imp_urg = list(map(lambda task: str(task.number) + ": "+task.description, task_db.list_tasks_p(1, 1)))
+    imp_not_urg = list(map(lambda task: str(task.number) + ": "+task.description, task_db.list_tasks_p(1, 0)))
+    not_imp_urg = list(map(lambda task: str(task.number) + ": "+task.description, task_db.list_tasks_p(0, 1)))
+    not_imp_not_urg = list(map(lambda task: str(task.number) + ": "+task.description, task_db.list_tasks_p(0, 0)))
 
     if len(imp_urg) < len(imp_not_urg):
         diff = len(imp_not_urg) - len(imp_urg)
@@ -111,14 +111,14 @@ def eisenhower_matrix():
         diff = len(imp_urg) - len(imp_not_urg)
         imp_not_urg.extend([" "] * diff)
 
-    col0 = ["Important"] + [" "] * (len(imp_urg) - 1) + ["---", "Not Important"]
+    col0 = ["Important (1)"] + [" "] * (len(imp_urg) - 1) + ["---", "Not Important (0)"]
     col1 = imp_urg + ["---"] + not_imp_urg
     col2 = ["---"] * (len(imp_urg) + 1 + max(len(not_imp_urg), len(not_imp_not_urg)))
     col3 = imp_not_urg + ["---"] + not_imp_not_urg
 
     zipped = zip_longest(col0, col1, col2, col3, fillvalue=" ")
     print(tabulate(list(zipped),
-                   headers=[" ", "Urgent", "---", "Not Urgent"]))
+                   headers=[" ", "Urgent (1)", "---", "Not Urgent (0)"]))
 
 
 def init():
