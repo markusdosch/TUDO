@@ -1,15 +1,15 @@
 from itertools import zip_longest
 from tabulate import tabulate
-from main import get_task_db
+from store import TasksStore
 
 
 def finish_tasks(numbers):
-    get_task_db().set_done(numbers)
+    TasksStore.active_db.set_done(numbers)
     return
 
 
 def remove_tasks(numbers):
-    get_task_db().remove(numbers)
+    TasksStore.active_db.remove(numbers)
     return
 
 
@@ -17,19 +17,19 @@ def add(args):
     if args[0] == "--prio" and len(args[1:]) % 3 == 0:
         tasks = args[1:]
         for i in range(0, len(tasks) // 3):
-            get_task_db().add_task_p([tasks[i * 3], tasks[i * 3 + 1], tasks[i * 3 + 2]])
+            TasksStore.active_db.add_task_p([tasks[i * 3], tasks[i * 3 + 1], tasks[i * 3 + 2]])
     else:
         # TODO Behaviour for no Tasks to add
         for description in args:
-            get_task_db().add_task(description)
+            TasksStore.active_db.add_task(description)
     return
 
 
 def list_tasks(show_completed=False, important = None, urgent = None):
     if important and urgent:
-        tasks = get_task_db().list_tasks_p(important, urgent)
+        tasks = TasksStore.active_db.list_tasks_p(important, urgent)
     else:
-        tasks = get_task_db().list_tasks()
+        tasks = TasksStore.active_db.list_tasks()
 
     if show_completed:
         print(tabulate([[
@@ -55,7 +55,7 @@ def list_tasks(show_completed=False, important = None, urgent = None):
 
 # TODO: Be able to set time range for grouping
 def group_tasks_archived(*args):
-    dates_and_nums = get_task_db().group_tasks_archived()
+    dates_and_nums = TasksStore.active_db.group_tasks_archived()
     print(tabulate(dates_and_nums,
                    headers=["Date", "Tasks finished"]))
     return dates_and_nums
@@ -64,10 +64,10 @@ def group_tasks_archived(*args):
 def eisenhower_matrix(*args):
     col0 = col1 = col2 = col3 = []
 
-    imp_urg = list(map(lambda task: str(task.number) + ": "+task.description, get_task_db().list_tasks_p(1, 1)))
-    imp_not_urg = list(map(lambda task: str(task.number) + ": "+task.description, get_task_db().list_tasks_p(1, 0)))
-    not_imp_urg = list(map(lambda task: str(task.number) + ": "+task.description, get_task_db().list_tasks_p(0, 1)))
-    not_imp_not_urg = list(map(lambda task: str(task.number) + ": "+task.description, get_task_db().list_tasks_p(0, 0)))
+    imp_urg = list(map(lambda task: str(task.number) + ": "+task.description, TasksStore.active_db.list_tasks_p(1, 1)))
+    imp_not_urg = list(map(lambda task: str(task.number) + ": "+task.description, TasksStore.active_db.list_tasks_p(1, 0)))
+    not_imp_urg = list(map(lambda task: str(task.number) + ": "+task.description, TasksStore.active_db.list_tasks_p(0, 1)))
+    not_imp_not_urg = list(map(lambda task: str(task.number) + ": "+task.description, TasksStore.active_db.list_tasks_p(0, 0)))
 
     if len(imp_urg) < len(imp_not_urg):
         diff = len(imp_not_urg) - len(imp_urg)

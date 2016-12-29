@@ -8,6 +8,7 @@ class TasksStore:
         self.conn = sqlite3.connect(db_name, detect_types=sqlite3.PARSE_DECLTYPES)
         self.conn_cursor = self.conn.cursor()
         self.init()
+        TasksStore.active_db = self
 
     def add_task(self, description):
         self.conn_cursor.execute("""INSERT INTO tasks (description, important, urgent) VALUES(?, ?, ?)""",

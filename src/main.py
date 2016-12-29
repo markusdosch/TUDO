@@ -3,11 +3,6 @@ import sys
 import controller
 import store
 
-task_db = None
-
-
-def get_task_db():
-    return task_db
 
 # TODO: Call our app via "tudo <command>", not with "main.py"
 def main(argv=sys.argv):
@@ -48,8 +43,7 @@ def list(args):
 
 
 def init(database_name = "database.db"):
-    global task_db
-    task_db = store.TasksStore(database_name)
+    store.TasksStore(database_name)
 
 
 if __name__ == "__main__":
