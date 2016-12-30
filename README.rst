@@ -28,7 +28,9 @@ How to publish to PyPi (already done)
 -------------------------------------
 1. Register on PyPi (or, for tests, on TestPyPi) the  and create a personal ``.pypirc`` file in your HOME directory (see https://packaging.python.org/distributing/#create-an-account)
 2. Register the package with ``python setup.py register -r <testpypi|pypi>`` (see https://packaging.python.org/distributing/#register-your-project)
+
   1. **Attention**: This does not work with the live PyPi version (``Server response (410): This API is no longer supported, instead simply upload the file.``). Using the register form (https://pypi.python.org/pypi?%3Aaction=submit_form) works.
+
 3. Upload the package with ``twine upload dist/* -r <testpypi|pipy>`` (see https://wiki.python.org/moin/TestPyPI)
 4. Install the package with ``pip install [-i https://testpypi.python.org/pypi] tudo``
 5. To uninstall, use ``pip uninstall tudo``
