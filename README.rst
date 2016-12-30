@@ -32,6 +32,8 @@ How to publish to PyPi (already done)
 4. Install the package with ``pip install [-i https://testpypi.python.org/pypi] tudo``
 5. To uninstall, use ``pip uninstall tudo``
 
+Also probably a good guide: http://peterdowns.com/posts/first-time-with-pypi.html
+
 Open issues
 -----------
 - ``database.db`` is currently created & saved in the same directory from where the ``tudo`` command was executed (leads to multiple ``database.db`` files). But our app should always use the same database location! (What is a good location? The user directory?)
