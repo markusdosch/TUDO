@@ -1,15 +1,15 @@
 import unittest
 
-import controller, main
+import controller, app
 
 
 class TestTudoMethods(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        main.init("test_db.db")
+        app.init("test_db.db")
 
     def setUp(self):
-        main.task_db.reset()
+        app.task_db.reset()
 
     def test_add(self):
         controller.add(["Do Homework"])

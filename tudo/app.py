@@ -1,11 +1,13 @@
 import sys
 
-import controller
-import store
+import tudo.controller as controller
+import tudo.store as store
 
 
-# TODO: Call our app via "tudo <command>", not with "main.py"
+# TODO: Call our app via "tudo <command>", not with "app.py"
 def main(argv=sys.argv):
+    init()
+
     if len(argv) == 1:
         # TODO print help
         return 1
@@ -44,8 +46,3 @@ def list(args):
 
 def init(database_name = "database.db"):
     store.TasksStore(database_name)
-
-
-if __name__ == "__main__":
-    init()
-    SystemExit(main())

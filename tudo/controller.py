@@ -1,6 +1,6 @@
 from itertools import zip_longest
 from tabulate import tabulate
-from store import TasksStore
+from tudo.store import TasksStore
 
 
 def finish_tasks(numbers):

@@ -1,10 +1,10 @@
 import sqlite3
 
-from task import Task
+from tudo.task import Task
 
 
 class TasksStore:
-    def __init__(self, db_name = "database.db"):
+    def __init__(self, db_name="database.db"):
         self.conn = sqlite3.connect(db_name, detect_types=sqlite3.PARSE_DECLTYPES)
         self.conn_cursor = self.conn.cursor()
         self.init()
