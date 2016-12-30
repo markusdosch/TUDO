@@ -27,7 +27,7 @@ How to continue development (tested on Windows)
 How to publish to PyPi (already done)
 -------------------------------------
 1. Register on PyPi (or, for tests, on TestPyPi) the  and create a personal ``.pypirc`` file in your HOME directory (see https://packaging.python.org/distributing/#create-an-account)
-2. Register the package with ``python setup.py register <testpypi|pypi>`` (see https://packaging.python.org/distributing/#register-your-project)
+2. Register the package with ``python setup.py register -r <testpypi|pypi>`` (see https://packaging.python.org/distributing/#register-your-project)
 3. Upload the package with ``twine upload dist/* -r <testpypi|pipy>`` (see https://wiki.python.org/moin/TestPyPI)
 4. Install the package with ``pip install [-i https://testpypi.python.org/pypi] tudo``
 5. To uninstall, use ``pip uninstall tudo``
