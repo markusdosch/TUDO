@@ -3,6 +3,9 @@ TUDO
 
 A simple command-line based TODO-app in Python. Install with ``pip install tudo``.
 
+.. image:: https://cl.ly/0u1D1j2m3X2C/Screen%20recording%202017-01-02%20at%2012.26.51%20PM.gif
+   :alt: Screenshot.gif
+
 Commands
 --------
 
