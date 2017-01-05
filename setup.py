@@ -74,7 +74,7 @@ setup(
     # pip to create the appropriate form of executable for the target platform.
     entry_points={
         'console_scripts': [
-            'tudo=tudo:main',
+            'tudo=tudo.cli:tudo', # command=package.module:function
         ],
     },
 )

@@ -10,10 +10,10 @@ Commands
 --------
 
 - ``tudo add <task_description> <...>``: Add new tasks. Default priorities: Important = No/0, Urgent = No/0
-- ``tudo add --prio <task_description> <important_val> <urgent_val> <...>``: Add new tasks with non-default priorities (possible priority values: 0 => No, 1 => Yes)
+- ``tudo add --prio <important_val> <urgent_val> <task_description> <task_description> ...``: Add new tasks with non-default priorities (possible priority values: 0 => No, 1 => Yes)
 - ``tudo list``: List all non-finished tasks
 - ``tudo list all``: List all tasks including the finished ones
-- ``tudo list --prio [all] <important_val> <urgent_val>``: List tasks, filter for specific important/urgent values
+- ``tudo list [all] --prio <important_val> <urgent_val>``: List tasks, filter for specific important/urgent values
 - ``tudo rm <task_id> <...>``: Delete tasks
 - ``tudo done <task_id> <...>``: Set a task as done/finished
 - ``tudo stats``: Display number of finished tasks per day

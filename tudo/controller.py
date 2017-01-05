@@ -3,35 +3,35 @@ from tabulate import tabulate
 from tudo.store import TasksStore
 
 
-def finish_tasks(numbers):
-    TasksStore.active_db.set_done(numbers)
+def finish_tasks(args):
+    TasksStore.active_db.set_done(args.task_ids)
     return
 
 
-def remove_tasks(numbers):
-    TasksStore.active_db.remove(numbers)
+def remove_tasks(args):
+    TasksStore.active_db.remove(args.task_ids)
     return
 
 
 def add(args):
-    if args[0] == "--prio" and len(args[1:]) % 3 == 0:
+    if args.prio:
         tasks = args[1:]
-        for i in range(0, len(tasks) // 3):
-            TasksStore.active_db.add_task_p([tasks[i * 3], tasks[i * 3 + 1], tasks[i * 3 + 2]])
+        for i in range(0, len(args.task_descriptions)):
+            TasksStore.active_db.add_task_p([args.task_descriptions[i], args.prio[0], args.prio[1]])
     else:
         # TODO Behaviour for no Tasks to add
-        for description in args:
+        for description in args.task_descriptions:
             TasksStore.active_db.add_task(description)
     return
 
 
-def list_tasks(show_completed=False, important = None, urgent = None):
-    if important and urgent:
-        tasks = TasksStore.active_db.list_tasks_p(important, urgent)
+def list_tasks(args):
+    if args.prio:
+        tasks = TasksStore.active_db.list_tasks_p(args.prio[0], args.prio[1])
     else:
         tasks = TasksStore.active_db.list_tasks()
 
-    if show_completed:
+    if args.all:
         print(tabulate([[
                             task.number,
                             task.description,
@@ -54,14 +54,14 @@ def list_tasks(show_completed=False, important = None, urgent = None):
 
 
 # TODO: Be able to set time range for grouping
-def group_tasks_archived(*args):
+def group_tasks_archived(args):
     dates_and_nums = TasksStore.active_db.group_tasks_archived()
     print(tabulate(dates_and_nums,
                    headers=["Date", "Tasks finished"]))
     return dates_and_nums
 
 
-def eisenhower_matrix(*args):
+def eisenhower_matrix(args):
     col0 = col1 = col2 = col3 = []
 
     imp_urg = list(map(lambda task: str(task.number) + ": "+task.description, TasksStore.active_db.list_tasks_p(1, 1)))
